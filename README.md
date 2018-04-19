@@ -1,23 +1,23 @@
-#Installation Process
+# Installation Process
 
 This document outlines how to run the tools discussed in this report. Each tool's installation process is outlined and discussed in turn, including all dependencies and libraries. Some of the code and installation processes are taken from the respective tools public repo.
 
-##Maian
+## Maian
 [Maian](https://github.com/MAIAN-tool/MAIAN)  is a tool for automatic detection of buggy Ethereum smart contracts of three different types: prodigal, suicidal and greedy. Maian processes contract's bytecode and tries to build a trace of transactions to find and confirm bugs. 
 
-###Requirments for Maian: 
+### Requirments for Maian: 
 1. Go Ethereum, check https://ethereum.github.io/go-ethereum/install/
 2. Solidity compiler, check http://solidity.readthedocs.io/en/develop/installing-solidity.html
 3. Z3 Theorem prover, check https://github.com/Z3Prover/z3
 4. web3, try pip install web3
 5. PyQt5 (only for GUI Maian), try sudo apt install python-pyqt5
 
-###Installation for Maian
+### Installation for Maian
 No direct installation is required for Maian, assuming that your system meets the requirements stipulated above. Simply clone the repo and run the scripts as depicted in the evaluating contracts section. The repo can be cloned as follows:
 
 	$ git clone git@github.com:MAIAN-tool/MAIAN.git
 
-###Evaluating Contracts
+### Evaluating Contracts
 Maian analyzes smart contracts defined in a file <contract file> with:
 
 1. Solidity source code, use -s <contract file> <main contract name>
