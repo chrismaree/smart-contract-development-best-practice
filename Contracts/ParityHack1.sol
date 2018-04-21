@@ -50,7 +50,7 @@ contract WalletAbi {
 
   function changeRequirement(uint _newRequired) external;
 
-  function isOwner(address _addr) constant returns (bool);
+  function isOwner(address _addr) external constant returns (bool);
 
   function hasConfirmed(bytes32 _operation, address _owner) external constant returns (bool);
 
@@ -104,7 +104,7 @@ contract WalletLibrary is WalletEvents {
 
   // constructor is given number of sigs required to do protected "onlymanyowners" transactions
   // as well as the selection of addresses capable of confirming them.
-  function initMultiowned(address[] _owners, uint _required) only_uninitialized {
+  function initMultiowned(address[] _owners, uint _required) {
     m_numOwners = _owners.length + 1;
     m_owners[1] = uint(msg.sender);
     m_ownerIndex[uint(msg.sender)] = 1;
@@ -198,7 +198,7 @@ contract WalletLibrary is WalletEvents {
   }
 
   // constructor - stores initial daily limit and records the present day's index.
-  function initDaylimit(uint _limit) only_uninitialized {
+  function initDaylimit(uint _limit) {
     m_dailyLimit = _limit;
     m_lastDay = today();
   }
@@ -211,12 +211,9 @@ contract WalletLibrary is WalletEvents {
     m_spentToday = 0;
   }
 
-  // throw unless the contract is not yet initialized.
-  modifier only_uninitialized { if (m_numOwners > 0) throw; _; }
-
   // constructor - just pass on the owner array to the multiowned and
   // the limit to daylimit
-  function initWallet(address[] _owners, uint _required, uint _daylimit) only_uninitialized {
+  function initWallet(address[] _owners, uint _required, uint _daylimit) { //EXPLOT HAPPENS HERE
     initDaylimit(_daylimit);
     initMultiowned(_owners, _required);
   }
@@ -260,7 +257,7 @@ contract WalletLibrary is WalletEvents {
   function create(uint _value, bytes _code) internal returns (address o_addr) {
     assembly {
       o_addr := create(_value, add(_code, 0x20), mload(_code))
-      jumpi(0, iszero(extcodesize(o_addr)))
+      jumpi(invalidJumpLabel, iszero(extcodesize(o_addr)))
     }
   }
 
@@ -370,7 +367,7 @@ contract WalletLibrary is WalletEvents {
   }
 
   // FIELDS
-  address constant _walletLibrary = 0xcafecafecafecafecafecafecafecafecafecafe;
+  address constant _walletLibrary = 0xCAfEcAfeCAfECaFeCaFecaFecaFECafECafeCaFe;
 
   // the number of owners that must confirm the same operation before it is run.
   uint public m_required;
@@ -393,69 +390,4 @@ contract WalletLibrary is WalletEvents {
 
   // pending transactions we have at present.
   mapping (bytes32 => Transaction) m_txs;
-}
-
-contract Wallet is WalletEvents {
-
-  // WALLET CONSTRUCTOR
-  //   calls the `initWallet` method of the Library in this context
-  function Wallet(address[] _owners, uint _required, uint _daylimit) {
-    // Signature of the Wallet Library's init function
-    bytes4 sig = bytes4(sha3("initWallet(address[],uint256,uint256)"));
-    address target = _walletLibrary;
-
-    // Compute the size of the call data : arrays has 2
-    // 32bytes for offset and length, plus 32bytes per element ;
-    // plus 2 32bytes for each uint
-    uint argarraysize = (2 + _owners.length);
-    uint argsize = (2 + argarraysize) * 32;
-
-    bool ret;
-    assembly{
-      mstore(0x0, sig)
-      codecopy(0x4,  sub(codesize, argsize), argsize)
-      ret := delegatecall(sub(gas, 10000), target, 0x0, add(argsize, 0x4), 0x0, 0x0)
-    }
-  }
-
-  // METHODS
-
-  // gets called when no other function matches
-  function() payable {
-    // just being sent some cash?
-    if (msg.value > 0)
-      Deposit(msg.sender, msg.value);
-    else if (msg.data.length > 0)
-      _walletLibrary.delegatecall(msg.data);
-  }
-
-  // Gets an owner by 0-indexed position (using numOwners as the count)
-  function getOwner(uint ownerIndex) constant returns (address) {
-    return address(m_owners[ownerIndex + 1]);
-  }
-
-  // As return statement unavailable in fallback, explicit the method here
-
-  function hasConfirmed(bytes32 _operation, address _owner) external constant returns (bool) {
-    return _walletLibrary.delegatecall(msg.data);
-  }
-
-  function isOwner(address _addr) constant returns (bool) {
-    return _walletLibrary.delegatecall(msg.data);
-  }
-
-  // FIELDS
-  address constant _walletLibrary = 0xcafecafecafecafecafecafecafecafecafecafe;
-
-  // the number of owners that must confirm the same operation before it is run.
-  uint public m_required;
-  // pointer used to find a free slot in m_owners
-  uint public m_numOwners;
-
-  uint public m_dailyLimit;
-  uint public m_spentToday;
-  uint public m_lastDay;
-
-  // list of owners
-  uint[256] m_owners;
 }

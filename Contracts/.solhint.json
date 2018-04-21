@@ -1,0 +1,7 @@
+  {
+    "extends": "default",
+    "rules": {
+      "var-name-mixedcase": false,
+      "indent": false
+    }
+  }
