@@ -112,12 +112,12 @@ To lint a contract or directory of contracts
 	
 	
 # Static Analisis tools used in paper
-1. (SmartCheck)[https://tool.smartdec.net/]
-2. (RemixIDE)[remix.ethereum.org]
-3. (Securify)[https://securify.ch/]
+1. [SmartCheck](https://tool.smartdec.net/)
+2. [RemixIDE](remix.ethereum.org)
+3. [Securify](https://securify.ch/)
 	
 # Repositories used in the paper
 The paper outlines 3 open source repositories, used in testing of the linter utilities.
-1. (Augur)[http://www.augur.net/]
-2. (Zeppelin)[https://zeppelin.solutions/]
-3. (Aragon)[https://aragon.one/]
+1. [Augur)(http://www.augur.net/)
+2. [Zeppelin](https://zeppelin.solutions/)
+3. [Aragon](https://aragon.one/)
