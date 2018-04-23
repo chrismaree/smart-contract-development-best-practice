@@ -95,16 +95,7 @@ This creates 2 files for you:
 1. .soliumignore - contains names of files and directories to ignore while linting
 2. .soliumrc.json - contains configuration that tells Solium how to lint your project. You should modify this file to configure rules, plugins and sharable configs.
 .soliumrc.json looks like:
-'''
-	{
-	  "extends": "solium:recommended",
-	  "plugins": ["security"],
-	  "rules": {
-	    "quotes": ["error", "double"],
-	    "indentation": ["error", 4]
-	  }
-	}
-'''
+
 To lint a contract or directory of contracts
 
 	solium -f foobar.sol
