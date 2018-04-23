@@ -77,7 +77,7 @@ To lint a single file:
 	solhint contracts/MyToken.sol	
 	
 ## Solium 
-(Solium)[https://github.com/duaraghav8/Solium] analyzes your Solidity code for style & security issues and fixes them. Standardize Smart Contract practices across your organisation. Integrate with your build system. 
+[Solium](https://github.com/duaraghav8/Solium) analyzes your Solidity code for style & security issues and fixes them. Standardize Smart Contract practices across your organisation. Integrate with your build system. 
 
 ### Instalation for Solium
 	
@@ -118,6 +118,6 @@ To lint a contract or directory of contracts
 	
 # Repositories used in the paper
 The paper outlines 3 open source repositories, used in testing of the linter utilities.
-1. [Augur)(http://www.augur.net/)
+1. [Augur](http://www.augur.net/)
 2. [Zeppelin](https://zeppelin.solutions/)
 3. [Aragon](https://aragon.one/)
